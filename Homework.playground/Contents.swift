@@ -50,7 +50,7 @@ trim(originalString : original, stringToRemove: remove)
 
 //HW 2
 class Unit {
-    var health: Int = 100
+    var health: Int
     var damage: Int
     var protection: Int
     var agility:Int
