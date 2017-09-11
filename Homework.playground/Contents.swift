@@ -50,79 +50,76 @@ trim(originalString : original, stringToRemove: remove)
 
 //HW 2
 class Unit {
-    var health = 100
-    var damage = 10
-    var protection = 10
-    var agility = 10
+    var health: Int = 100
+    var damage: Int
+    var protection: Int
+    var agility:Int
     var nickname = ""
     func atack(to enemy: Unit) {
         enemy.health = enemy.health - damage
     }
-    
-}
-class Mage: Unit {
-    override init() {
-        super.init()
-        health = 80
-        damage = 20
-        agility = 5
-        nickname = "Mage"
+    init(health: Int, damage: Int,protection: Int, agility: Int, nickname: String) {
+        self.agility = agility
+        self.damage = damage
+        self.health = health
+        self.nickname = nickname
+        self.protection = protection
     }
-    override func atack(to enemy: Unit) {
-        enemy.health = enemy.health - (damage - enemy.protection/4)
+}
+let balance = 4
+class Mage: Unit {
+    override init(health: Int, damage: Int, protection: Int, agility: Int, nickname: String) {
+        super.init(health: health, damage: damage, protection: protection, agility: agility, nickname: nickname)
+    }
+        override func atack(to enemy: Unit) {
+        enemy.health = enemy.health - (damage - enemy.protection/balance)
         print("Mage used some Magic")
     }
 }
 class Knight: Unit {
-    override init() {
-        super.init()
-        health = 120
-        protection = 30
-        agility = 3
-        nickname = "Knight"
+    override init(health: Int, damage: Int, protection: Int, agility: Int, nickname: String) {
+        super.init(health: health, damage: damage, protection: protection, agility: agility, nickname: nickname)
     }
     override func atack(to enemy: Unit) {
-        enemy.health = enemy.health - (damage - enemy.protection/4)
+        enemy.health = enemy.health - (damage - enemy.protection/balance)
         print("Knight attacked")
     }
 }
 class Assassin: Unit {
-    override init() {
-        super.init()
-        damage = 15
-        protection = 15
-        nickname = "Assassin"
+    override init(health: Int, damage: Int, protection: Int, agility: Int, nickname: String) {
+        super.init(health: health, damage: damage, protection: protection, agility: agility, nickname: nickname)
     }
     override func atack(to enemy: Unit) {
-        enemy.health = enemy.health - (damage - enemy.protection/4)
+        enemy.health = enemy.health - (damage - enemy.protection/balance)
         print("Assassin attacked")
     }
 }
 class BattleField {
-    func beginBattle(player1 : Unit, player2: Unit) {
-        while (player1.health > 0) || (player2.health > 0) {
-            player1.atack(to: player2)
-            print(player2.health)
-            if (player2.health<=0 ){
-                print(player1.nickname + " wins!")
-                break
-            }
-            player2.atack(to: player1)
-            print(player1.health)
-            if player1.health<=0 {
-                print(player2.nickname + " wins!")
-                break
+    func beginBattle(with units: Unit...) {
+        print("The battle begins!" + "\n" + "!-----Let's go-----!")
+        
+        while units[0].health > 0 && units[1].health > 0 && units[2].health > 0 {
+            units[0].atack(to: units[1])
+            units[1].atack(to: units[2])
+            units[2].atack(to: units[0])
+        }
+        print("The battle ended" + "\n" )
+        print("People who took part in battle: " + units[0].nickname + ", " + units[1].nickname + ", " + units[2].nickname)
+        if units[0].health>0 {
+            print(units[0].nickname + " wins")
+        } else { if units[1].health>0 && units[2].health<=0 {
+            print(units[1].nickname + " wins")
+        } else{
+            print(units[2].nickname + " wins")
             }
         }
     }
 }
-let player1 = Assassin()
-let player2 = Knight()
-var battle = BattleField()
-battle.beginBattle(player1: player1, player2: player2)
-print("Players who played today: " + player1.nickname + ", " + player2.nickname + "!!")
 
-
-
+var firstPlayer = Assassin(health: 100, damage: 45, protection: 10, agility: 15, nickname: "Yea boi")
+var secondPlayer = Knight(health: 120, damage: 20, protection: 20, agility: 3, nickname: "Retro paladin")
+var thirdPlayer = Mage(health: 90, damage: 50, protection: 5, agility: 10, nickname: "Mage")
+var battleField = BattleField()
+battleField.beginBattle(with: firstPlayer,secondPlayer,thirdPlayer)
 
 
